@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com',]
 
@@ -118,8 +118,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# URL to use when referring to static files
+STATIC_URL = '/static/'
+
+# Folders where Django will look for your source static files during development
+# We mirror the Snapfolio assets under "static/assets/..." for best compatibility
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# The destination folder for collected static files (used in production or collectstatic)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type

@@ -1,0 +1,66 @@
+{% extends 'base_snapfolio.html' %}
+{% load static %}
+
+{% block title %}{{ project.title|default:'Project Details' }} — Snapfolio{% endblock %}
+{% block body_class %}portfolio-details-page dark-background{% endblock %}
+
+{% block header %}
+<header id="header" class="header dark-background d-flex flex-column justify-content-center">
+  <i class="header-toggle d-xl-none bi bi-list"></i>
+  <div class="header-container d-flex flex-column align-items-start">
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="/preview#hero"><i class="bi bi-house navicon"></i>Home</a></li>
+        <li><a href="/preview#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="/preview#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
+        <li><a href="/preview#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+  <!-- Page Title -->
+  <div class="page-title dark-background">
+    <div class="container d-lg-flex justify-content-between align-items-center">
+      <h1 class="mb-2 mb-lg-0">{{ project.title|default:'Project Details' }}</h1>
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="/preview/">Home</a></li>
+          <li class="current">Project Details</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Portfolio Details Section (simplified placeholder) -->
+  <section id="portfolio-details" class="portfolio-details section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        <div class="col-lg-8">
+          <img class="img-fluid rounded" src="{% static 'assets/img/portfolio/portfolio-1.jpg' %}" alt="Project image">
+        </div>
+        <div class="col-lg-4">
+          <div class="portfolio-info p-4 border rounded-3">
+            <h3>Project information</h3>
+            <ul class="list-unstyled small mb-0">
+              <li><strong>Category</strong>: Web App</li>
+              <li><strong>Tech</strong>: Django, Bootstrap</li>
+              <li><strong>Slug</strong>: {{ project.slug }}</li>
+              <li><strong>Project URL</strong>: <a href="#">Coming soon</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-4 mt-4">
+        <div class="col-12">
+          <div class="portfolio-description">
+            <h2>About this project</h2>
+            <p>{{ project.description|default:'Detailed description coming soon.' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
