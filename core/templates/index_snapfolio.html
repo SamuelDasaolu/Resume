@@ -12,39 +12,21 @@
         <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
         <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
         <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
-        <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-          <ul>
-            <li><a href="#">Dropdown 1</a></li>
-            <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="#">Deep Dropdown 1</a></li>
-                <li><a href="#">Deep Dropdown 2</a></li>
-                <li><a href="#">Deep Dropdown 3</a></li>
-                <li><a href="#">Deep Dropdown 4</a></li>
-                <li><a href="#">Deep Dropdown 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Dropdown 2</a></li>
-            <li><a href="#">Dropdown 3</a></li>
-            <li><a href="#">Dropdown 4</a></li>
-          </ul>
-        </li>
         <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
       </ul>
     </nav>
     <div class="social-links text-center">
-      <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-      <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-      <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-      <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
-      <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+      {% for social in socials %}
+        <a href="{{ social.url }}" target="_blank" class="social-icon">
+            <i class="{{ social.icon_class|default:'bi bi-link' }}"></i>
+        </a>
+      {% endfor %}
     </div>
   </div>
 </header>
 {% endblock %}
 
 {% block content %}
-  <!-- Hero Section (simplified preview) -->
   <section id="hero" class="hero section">
     <div class="background-elements">
       <div class="bg-circle circle-1"></div>
@@ -55,10 +37,11 @@
         <div class="row align-items-center">
           <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
             <div class="hero-text">
-              <h1>Snap<span class="accent-text">Folio</span></h1>
-              <h2>{{ profile.full_name|default:'Your Name' }}</h2>
-              <p class="lead">I'm a <span class="typed" data-typed-items="UI/UX Designer, Web Developer, Brand Strategist, Creative Director"></span></p>
-              <p class="description">This is a preview of your new Snapfolio theme integrated with Django.</p>
+              <h1>{{ profile.full_name|default:'Samuel Dasaolu' }}</h1>
+
+              <p class="lead">I'm a <span class="typed" data-typed-items="{{ profile.title|default:'Engineer, Developer' }}"></span></p>
+
+              <p class="description">{{ profile.summary|truncatewords:20 }}</p>
               <div class="hero-actions">
                 <a href="#portfolio" class="btn btn-primary">View My Work</a>
                 <a href="#contact" class="btn btn-outline">Get In Touch</a>
@@ -69,7 +52,11 @@
             <div class="hero-visual">
               <div class="profile-container">
                 <div class="profile-background"></div>
-                <img src="{% static 'assets/img/profile/profile-2.webp' %}" alt="Profile" class="profile-image">
+                {% if profile.headshot %}
+                    <img src="{{ profile.display_image }}" alt="Profile" class="profile-image">
+                {% else %}
+                    <img src="{% static 'assets/img/profile/profile-2.webp' %}" alt="Default Profile" class="profile-image">
+                {% endif %}
               </div>
             </div>
           </div>
@@ -78,35 +65,34 @@
     </div>
   </section>
 
-  <!-- About Section -->
   <section id="about" class="about section">
-
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-
       <div class="row">
         <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200">
           <div class="profile-card">
             <div class="profile-header">
               <div class="profile-image">
-                <img src="{% static 'assets/img/profile/profile-square-3.webp' %}" alt="Profile Image" class="img-fluid">
-              </div>
-              <div class="profile-badge">
-                <i class="bi bi-check-circle-fill"></i>
+                {% if profile.headshot %}
+                    <img src="{{ profile.display_image }}" alt="Profile Image" class="img-fluid">
+                {% endif %}
               </div>
             </div>
             <div class="profile-content">
-              <h3>{{ profile.full_name|default:'Your Name' }}</h3>
-              <p class="profession">{{ profile.title|default:'Your Title' }}</p>
+              <h3>{{ profile.full_name }}</h3>
+              <p class="profession">{{ profile.title }}</p>
               <div class="contact-links">
-                <a href="mailto:{{ profile.email|default:'you@example.com' }}" class="contact-item">
-                  <i class="bi bi-envelope"></i>
-                  {{ profile.email|default:'you@example.com' }}
+                <a href="mailto:{{ profile.email }}" class="contact-item">
+                  <i class="bi bi-envelope"></i> {{ profile.email }}
                 </a>
                 <a href="#" class="contact-item">
-                  <i class="bi bi-geo-alt"></i>
-                  {{ profile.location|default:'City, Country' }}
+                  <i class="bi bi-geo-alt"></i> {{ profile.location }}
                 </a>
               </div>
+              {% if profile.get_resume_url != "#" %}
+              <div class="mt-3 text-center">
+                  <a href="{{ profile.get_resume_url }}" class="btn btn-sm btn-primary" download>Download CV</a>
+              </div>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -115,267 +101,126 @@
           <div class="about-content">
             <div class="section-header">
               <span class="badge-text">Get to Know Me</span>
-              <h2>Passionate About Creating Digital Experiences</h2>
+              <h2>About Me</h2>
             </div>
             <div class="description">
-              <p>{{ profile.summary|default:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.' }}</p>
-              <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</p>
+              <p>{{ profile.summary|linebreaks }}</p>
             </div>
+
             <div class="stats-grid">
+              {% for stat in stats %}
               <div class="stat-item">
-                <div class="stat-number">150+</div>
-                <div class="stat-label">Projects Completed</div>
+                <div class="stat-number">{{ stat.count }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
               </div>
-              <div class="stat-item">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">Happy Clients</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number">5+</div>
-                <div class="stat-label">Years Experience</div>
-              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
       </div>
-
-    </div>
-
-  </section>
-
-  <!-- Stats Section (from Snapfolio) -->
-  <section id="stats" class="stats section light-background">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row gy-4">
-        <div class="col-lg-3 col-md-6">
-          <div class="stats-item text-center">
-            <span data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="1" class="purecounter"></span>
-            <p>Projects</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="stats-item text-center">
-            <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" class="purecounter"></span>
-            <p>Clients</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="stats-item text-center">
-            <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="1" class="purecounter"></span>
-            <p>Years Experience</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="stats-item text-center">
-            <span data-purecounter-start="0" data-purecounter-end="12" data-purecounter-duration="1" class="purecounter"></span>
-            <p>Awards</p>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Skills Section -->
   <section id="skills" class="skills section">
-
-    <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Skills</h2>
-      <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-    </div><!-- End Section Title -->
-
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="skills-category" data-aos="fade-up" data-aos-delay="200">
-            <h3>Front-end Development</h3>
-            <div class="skills-animation">
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>HTML/CSS</h4>
-                  <span class="skill-percentage">95%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Expert level knowledge of semantic HTML5 and modern CSS3 techniques</div>
-              </div>
-
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>JavaScript</h4>
-                  <span class="skill-percentage">85%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Strong proficiency in ES6+, DOM manipulation, and modern frameworks</div>
-              </div>
-
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>React</h4>
-                  <span class="skill-percentage">80%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Experience with React hooks, state management, and component architecture</div>
-              </div>
-            </div>
-          </div><!-- End Frontend Skills -->
-        </div>
-
-        <div class="col-lg-6">
-          <div class="skills-category" data-aos="fade-up" data-aos-delay="300">
-            <h3>Back-end Development</h3>
-            <div class="skills-animation">
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>Node.js</h4>
-                  <span class="skill-percentage">75%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Server-side JavaScript development with Express and REST APIs</div>
-              </div>
-
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>Python</h4>
-                  <span class="skill-percentage">70%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Python development with Django and data analysis tools</div>
-              </div>
-
-              <div class="skill-item">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>SQL</h4>
-                  <span class="skill-percentage">65%</span>
-                </div>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="skill-tooltip">Database design, optimization, and complex queries</div>
-              </div>
-            </div>
-          </div><!-- End Backend Skills -->
-        </div>
-      </div>
-
+      <p>My technical expertise and proficiency levels.</p>
     </div>
 
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row">
+        {% for category in skill_categories %}
+        <div class="col-lg-6">
+          <div class="skills-category" data-aos="fade-up" data-aos-delay="200">
+            <h3>{{ category.name }}</h3>
+            <div class="skills-animation">
+              {% for skill in category.skills.all %}
+              <div class="skill-item">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4>{{ skill.name }}</h4>
+                  <span class="skill-percentage">{{ skill.level }}%</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="{{ skill.level }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ skill.level }}%;"></div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </section>
 
-  <!-- Resume Section -->
   <section id="resume" class="resume section">
-
-    <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Resume</h2>
-      <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem.</p>
-    </div><!-- End Section Title -->
+      <p>A summary of my professional journey and education.</p>
+    </div>
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div class="row">
-
         <div class="col-lg-6">
           <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h3><i class="bi bi-person-badge me-2"></i>Summary</h3>
             <div class="resume-item pb-0">
-              <h4>{{ profile.full_name|default:'Your Name' }}</h4>
-              <p><em>{{ profile.summary|default:'Passionate about creating exceptional digital experiences.' }}</em></p>
+              <h4>{{ profile.full_name }}</h4>
+              <p><em>{{ profile.summary|truncatewords:30 }}</em></p>
             </div>
           </div>
 
           <div class="resume-section" data-aos="fade-up" data-aos-delay="150">
             <h3><i class="bi bi-mortarboard me-2"></i>Education</h3>
+            {% for edu in education_list %}
             <div class="resume-item">
-              <h4>Bachelor of Science in Computer Science</h4>
-              <h5>2016 - 2020</h5>
-              <p><em>University Name</em></p>
-              <p>Brief description here.</p>
+              <h4>{{ edu.program }}</h4>
+              <h5>{{ edu.start_date|date:"Y" }} - {% if edu.end_date %}{{ edu.end_date|date:"Y" }}{% else %}Present{% endif %}</h5>
+              <p><em>{{ edu.school }}</em></p>
+              <p>{{ edu.description }}</p>
             </div>
+            {% endfor %}
           </div>
 
+          {% if awards %}
           <div class="resume-section" data-aos="fade-up" data-aos-delay="175">
-            <h3><i class="bi bi-award me-2"></i>Certifications</h3>
-            <div class="resume-item">
-              <h4>AWS Certified Solutions Architect — Professional</h4>
-              <h5>2023</h5>
-              <p><em>AWS</em></p>
-            </div>
-            <div class="resume-item">
-              <h4>Google Cloud Professional Architect</h4>
-              <h5>2022</h5>
-              <p><em>Google Cloud</em></p>
-            </div>
+             <h3><i class="bi bi-trophy me-2"></i>Awards</h3>
+             {% for award in awards %}
+             <div class="resume-item">
+                 <h4>{{ award.title }}</h4>
+                 <h5>{{ award.year }}</h5>
+                 <p><em>{{ award.issuer }}</em></p>
+                 <p>{{ award.description }}</p>
+             </div>
+             {% endfor %}
           </div>
-
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="200">
-            <h3><i class="bi bi-trophy me-2"></i>Awards</h3>
-            <div class="resume-item">
-              <h4>Outstanding Developer Award</h4>
-              <h5>2024</h5>
-              <p><em>Tech Community</em></p>
-              <p>Recognized for significant contributions to open-source and community mentorship.</p>
-            </div>
-            <div class="resume-item">
-              <h4>Innovation in Web Design</h4>
-              <h5>2023</h5>
-              <p><em>Design Conference</em></p>
-              <p>Awarded for innovative UI/UX implementations in responsive web applications.</p>
-            </div>
-          </div>
+          {% endif %}
         </div>
 
         <div class="col-lg-6">
           <div class="resume-section" data-aos="fade-up" data-aos-delay="200">
             <h3><i class="bi bi-briefcase me-2"></i>Professional Experience</h3>
+            {% for exp in experiences %}
             <div class="resume-item">
-              <h4>Senior Web Developer</h4>
-              <h5>2022 - Present</h5>
-              <p><em>Company Name</em></p>
-              <ul>
-                <li>Responsibility one</li>
-                <li>Responsibility two</li>
-                <li>Responsibility three</li>
-              </ul>
+              <h4>{{ exp.role }}</h4>
+              <h5>{{ exp.start_date|date:"Y" }} - {% if exp.end_date %}{{ exp.end_date|date:"Y" }}{% else %}Present{% endif %}</h5>
+              <p><em>{{ exp.company }}</em></p>
+              <p>{{ exp.description|linebreaks }}</p>
             </div>
-            <div class="resume-item">
-              <h4>Web Developer</h4>
-              <h5>2020 - 2022</h5>
-              <p><em>Company Name</em></p>
-              <ul>
-                <li>Responsibility one</li>
-                <li>Responsibility two</li>
-                <li>Responsibility three</li>
-              </ul>
-            </div>
+            {% endfor %}
           </div>
         </div>
-
       </div>
     </div>
-
   </section>
 
-  <!-- Portfolio Section -->
   <section id="portfolio" class="portfolio section">
-
-    <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Portfolio</h2>
-      <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-    </div><!-- End Section Title -->
+      <p>My latest projects and works.</p>
+    </div>
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-
       <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
 
         <div class="row">
@@ -383,304 +228,97 @@
             <div class="filters-wrapper" data-aos="fade-right" data-aos-delay="150">
               <ul class="portfolio-filters isotope-filters">
                 <li data-filter="*" class="filter-active">All Projects</li>
-                <li data-filter=".filter-photography">Photography</li>
-                <li data-filter=".filter-design">Design</li>
-                <li data-filter=".filter-automotive">Automotive</li>
-                <li data-filter=".filter-nature">Nature</li>
+                {% for cat in project_categories %}
+                <li data-filter=".{{ cat.slug }}">{{ cat.name }}</li>
+                {% endfor %}
               </ul>
             </div>
           </div>
 
           <div class="col-lg-9">
             <div class="row gy-4 portfolio-container isotope-container" data-aos="fade-up" data-aos-delay="200">
-
-              <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-photography">
+              {% for project in projects %}
+              <div class="col-lg-6 col-md-6 portfolio-item isotope-item {{ project.category.slug|default:'uncategorized' }}">
                 <div class="portfolio-wrap">
-                  <img src="{% static 'assets/img/portfolio/portfolio-portrait-1.webp' %}" class="img-fluid" alt="Portfolio Image" loading="lazy">
+                  {% if project.image %}
+                    <img src="{{ project.display_image }}" class="img-fluid" alt="{{ project.title }}" loading="lazy">
+                  {% else %}
+                    <div class="img-fluid placeholder-image" style="width:100%; height:250px; background-color:#ccc;"></div>
+                  {% endif %}
                   <div class="portfolio-info">
                     <div class="content">
-                      <span class="category">Photography</span>
-                      <h4>Capturing Moments</h4>
+                      <span class="category">{{ project.category.name|default:'Project' }}</span>
+                      <h4>{{ project.title }}</h4>
                       <div class="portfolio-links">
-                        <a href="{% static 'assets/img/portfolio/portfolio-portrait-1.webp' %}" class="glightbox" title="Capturing Moments"><i class="bi bi-plus-lg"></i></a>
-                        <a href="{% url 'project_detail' slug='capturing-moments' %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
+                        {% if project.image %}
+                          <a href="{{ project.display_image }}" class="glightbox" title="{{ project.title }}"><i class="bi bi-plus-lg"></i></a>
+                        {% endif %}
+                        <a href="{% url 'project_detail' slug=project.slug %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div><!-- End Portfolio Item -->
-
-              <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-design">
-                <div class="portfolio-wrap">
-                  <img src="{% static 'assets/img/portfolio/portfolio-2.webp' %}" class="img-fluid" alt="Portfolio Image" loading="lazy">
-                  <div class="portfolio-info">
-                    <div class="content">
-                      <span class="category">Web Design</span>
-                      <h4>Woodcraft Design</h4>
-                      <div class="portfolio-links">
-                        <a href="{% static 'assets/img/portfolio/portfolio-2.webp' %}" class="glightbox" title="Woodcraft Design"><i class="bi bi-plus-lg"></i></a>
-                        <a href="{% url 'project_detail' slug='woodcraft-design' %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Portfolio Item -->
-
-              <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-automotive">
-                <div class="portfolio-wrap">
-                  <img src="{% static 'assets/img/portfolio/portfolio-portrait-2.webp' %}" class="img-fluid" alt="Portfolio Image" loading="lazy">
-                  <div class="portfolio-info">
-                    <div class="content">
-                      <span class="category">Automotive</span>
-                      <h4>Classic Beauty</h4>
-                      <div class="portfolio-links">
-                        <a href="{% static 'assets/img/portfolio/portfolio-portrait-2.webp' %}" class="glightbox" title="Classic Beauty"><i class="bi bi-plus-lg"></i></a>
-                        <a href="{% url 'project_detail' slug='classic-beauty' %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Portfolio Item -->
-
-              <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-nature">
-                <div class="portfolio-wrap">
-                  <img src="{% static 'assets/img/portfolio/portfolio-portrait-4.webp' %}" class="img-fluid" alt="Portfolio Image" loading="lazy">
-                  <div class="portfolio-info">
-                    <div class="content">
-                      <span class="category">Nature</span>
-                      <h4>Natural Growth</h4>
-                      <div class="portfolio-links">
-                        <a href="{% static 'assets/img/portfolio/portfolio-portrait-4.webp' %}" class="glightbox" title="Natural Growth"><i class="bi bi-plus-lg"></i></a>
-                        <a href="{% url 'project_detail' slug='natural-growth' %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Portfolio Item -->
-
-              <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-photography">
-                <div class="portfolio-wrap">
-                  <img src="{% static 'assets/img/portfolio/portfolio-5.webp' %}" class="img-fluid" alt="Portfolio Image" loading="lazy">
-                  <div class="portfolio-info">
-                    <div class="content">
-                      <span class="category">Photography</span>
-                      <h4>Urban Stories</h4>
-                      <div class="portfolio-links">
-                        <a href="{% static 'assets/img/portfolio/portfolio-5.webp' %}" class="glightbox" title="Urban Stories"><i class="bi bi-plus-lg"></i></a>
-                        <a href="{% url 'project_detail' slug='urban-stories' %}" title="More Details"><i class="bi bi-arrow-right"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Portfolio Item -->
-
+              </div>
+              {% endfor %}
             </div>
           </div>
-
         </div>
-
       </div>
-
     </div>
   </section>
 
-  <!-- Services Section -->
   <section id="services" class="services section">
-
-    <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Services</h2>
-      <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-    </div><!-- End Section Title -->
-
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-      <div class="service-header">
-        <div class="row align-items-center">
-          <div class="col-lg-8 col-md-12">
-            <div class="service-intro">
-              <h2 class="service-heading">
-                <div>Innovative business</div>
-                <div><span>performance solutions</span></div>
-              </h2>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-12">
-            <div class="service-summary">
-              <p>
-                We integrate forward-thinking strategies, creative approaches, and state-of-the-art technologies to deliver exceptional customer experiences that drive growth and engage target markets.
-              </p>
-              <a href="#" class="service-btn">
-                View All Services
-                <i class="bi bi-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-palette"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Creative <span>branding</span>
-              </a>
-            </h3>
-            <p>
-              Nulla facilisi. Maecenas eget magna neque. Suspendisse potenti. Curabitur eleifend nisi non magna vulputate, vel condimentum libero tempus. Proin consectetur feugiat diam.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-gem"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Design <span>systems</span>
-              </a>
-            </h3>
-            <p>
-              Praesent euismod varius tellus, vel bibendum nunc interdum at. Donec vehicula diam vel metus venenatis convallis. Aliquam erat volutpat. Etiam viverra magna sit amet.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-megaphone"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Marketing <span>strategies</span>
-              </a>
-            </h3>
-            <p>
-              Vivamus tempor velit id magna dictum, sed fermentum nisi faucibus. Integer nec pretium sapien. Fusce tincidunt ligula et purus consequat, ac pellentesque nulla eleifend.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-code-slash"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Digital <span>platforms</span>
-              </a>
-            </h3>
-            <p>
-              Cras fermentum odio eu feugiat malesuada. Vestibulum ante ipsum primis in faucibus orci luctus et accumsan cursus. Morbi placerat nulla vel nunc viverra accumsan.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-graph-up"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Growth <span>acceleration</span>
-              </a>
-            </h3>
-            <p>
-              Aenean vel augue vel nisi bibendum posuere. Phasellus in lacus quis urna sodales dignissim. Duis aliquam libero eget risus facilisis. Quisque eget libero vel nisl fringilla.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-          <div class="service-card position-relative z-1">
-            <div class="service-icon">
-              <i class="bi bi-camera-video"></i>
-            </div>
-            <a href="#" class="card-action d-flex align-items-center justify-content-center rounded-circle">
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-            <h3>
-              <a href="#">
-                Media <span>solutions</span>
-              </a>
-            </h3>
-            <p>
-              Etiam efficitur lacus in diam finibus, nec ultrices est sagittis. Maecenas elementum magna sed risus faucibus, nec commodo purus facilisis. Vestibulum accumsan magna.
-            </p>
-          </div>
-        </div>
-      </div>
-
+      <p>What I can do for you.</p>
     </div>
 
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row justify-content-center">
+        {% for service in services %}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-card position-relative z-1">
+            <div class="service-icon">
+              <i class="{{ service.icon_class|default:'bi bi-code-square' }}"></i>
+            </div>
+            <a href="{% url 'service_detail' slug=service.slug %}" class="card-action d-flex align-items-center justify-content-center rounded-circle">
+              <i class="bi bi-arrow-right"></i>
+            </a>
+            <h3><a href="{% url 'service_detail' slug=service.slug %}">{{ service.title }}</a></h3>
+            <p>{{ service.short_description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </section>
 
-  <!-- Contact Section -->
   <section id="contact" class="contact section">
-
-    <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Contact</h2>
-      <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-    </div><!-- End Section Title -->
+      <p>Feel free to reach out for collaborations or inquiries.</p>
+    </div>
 
     <div class="container">
-
       <div class="row g-4 g-lg-5">
         <div class="col-lg-5">
           <div class="info-box">
             <h3>Contact Info</h3>
-            <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.</p>
+            <p>I am available for freelance work and full-time opportunities.</p>
 
             <div class="info-item">
-              <div class="icon-box">
-                <i class="bi bi-geo-alt"></i>
-              </div>
+              <div class="icon-box"><i class="bi bi-geo-alt"></i></div>
               <div class="content">
-                <h4>Our Location</h4>
-                <p>A108 Adam Street</p>
-                <p>New York, NY 535022</p>
+                <h4>Location</h4>
+                <p>{{ profile.location }}</p>
               </div>
             </div>
 
             <div class="info-item">
-              <div class="icon-box">
-                <i class="bi bi-telephone"></i>
-              </div>
-              <div class="content">
-                <h4>Phone Number</h4>
-                <p>+1 5589 55488 55</p>
-                <p>+1 6678 254445 41</p>
-              </div>
-            </div>
-
-            <div class="info-item">
-              <div class="icon-box">
-                <i class="bi bi-envelope"></i>
-              </div>
+              <div class="icon-box"><i class="bi bi-envelope"></i></div>
               <div class="content">
                 <h4>Email Address</h4>
-                <p>info@example.com</p>
-                <p>contact@example.com</p>
+                <p><a href="mailto:{{ profile.email }}" class="text-white">{{ profile.email }}</a></p>
               </div>
             </div>
           </div>
@@ -689,44 +327,70 @@
         <div class="col-lg-7">
           <div class="contact-form">
             <h3>Get In Touch</h3>
-            <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.</p>
-
-            <form action="forms/contact.php" method="post" class="php-email-form">
+            <form action="{% url 'homepage' %}" method="post" class="php-email-form">
+              {% csrf_token %}
               <div class="row gy-4">
-
                 <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                  {{ form.name }}
                 </div>
-
                 <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                  {{ form.email }}
                 </div>
-
                 <div class="col-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                  {{ form.subject }}
                 </div>
-
                 <div class="col-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                  {{ form.message }}
                 </div>
-
                 <div class="col-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
                   <button type="submit" class="btn">Send Message</button>
                 </div>
-
               </div>
             </form>
-
           </div>
         </div>
-
       </div>
-
     </div>
-
   </section>
 {% endblock %}
+
+{% block scripts %}
+<script>
+  /**
+   * Custom Isotope Filtering
+   * This script takes direct control of the portfolio filtering,
+   * bypassing the theme's default script to ensure it works correctly.
+   */
+  window.addEventListener('load', () => {
+    let portfolioContainer = document.querySelector('.portfolio-container');
+    if (portfolioContainer) {
+      let portfolioIsotope = new Isotope(portfolioContainer, {
+        itemSelector: '.portfolio-item',
+        layoutMode: 'masonry'
+      });
+
+      let filterButtons = document.querySelectorAll('.portfolio-filters li');
+
+      filterButtons.forEach(el => {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          // Remove 'filter-active' class from all filter buttons
+          filterButtons.forEach(function(selector) {
+            selector.classList.remove('filter-active');
+          });
+
+          // Add 'filter-active' class to the clicked button
+          this.classList.add('filter-active');
+
+          // Filter the portfolio items
+          portfolioIsotope.arrange({
+            filter: this.getAttribute('data-filter')
+          });
+        });
+      });
+    }
+  });
+</script>
+{% endblock %}
+

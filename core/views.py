@@ -1,39 +1,59 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 
+from .forms import ContactForm
+from .models import (
+    Profile, SocialLink, SkillCategory, Project, ProjectCategory,
+    Experience, Education, Certification, Service, Stat, Award, ContactMessage
+)
 
-# Create your views here.
-
-from .models import Profile, SocialLink, SkillCategory, Project, Experience, Education, Certification, Service
 
 def index(request):
-    profile = Profile.objects.order_by('-updated_at').first()
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')
+    else:
+        form = ContactForm()
+
+    # Get the most recently updated profile
+    profile = Profile.objects.latest('updated_at') if Profile.objects.exists() else None
+
     context = {
         'profile': profile,
         'socials': SocialLink.objects.all(),
         'skill_categories': SkillCategory.objects.prefetch_related('skills').all(),
-        'projects': Project.objects.all(),
+
+        # Portfolio Section
+        # select_related boosts performance by fetching the category in the same query
+        'projects': Project.objects.select_related('category').all(),
+        'project_categories': ProjectCategory.objects.all(),  # For the filter buttons
+
+        # Resume Section
         'experiences': Experience.objects.all(),
         'education_list': Education.objects.all(),
         'certifications': Certification.objects.all(),
+        'awards': Award.objects.all(),
+
+        # Other Sections
+        'stats': Stat.objects.all(),
         'services': Service.objects.all(),
+        'form': form,
     }
     return render(request, template_name='index_snapfolio.html', context=context)
 
 
-
 def preview(request):
-    # Render the Snapfolio preview without requiring DB models yet
+    """Static preview for testing templates without data."""
     return render(request, 'index_snapfolio.html', {})
 
 
-from django.shortcuts import get_object_or_404
-
-def project_detail(request, slug):
-    project = get_object_or_404(Project, slug=slug)
-    return render(request, 'portfolio_detail_snapfolio.html', {'project': project})
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'portfolio_detail_snapfolio.html'
 
 
-def service_detail(request, slug):
-    service = get_object_or_404(Service, slug=slug)
-    return render(request, 'service_detail_snapfolio.html', {'service': service})
+class ServiceDetailView(DetailView):
+    model = Service
+    template_name = 'service_detail_snapfolio.html'

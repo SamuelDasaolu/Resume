@@ -1,7 +1,7 @@
 {% extends 'base_snapfolio.html' %}
 {% load static %}
 
-{% block title %}{{ service.title|default:'Service Details' }} — Snapfolio{% endblock %}
+{% block title %}{{ service.title }} — Services{% endblock %}
 {% block body_class %}service-details-page dark-background{% endblock %}
 
 {% block header %}
@@ -10,10 +10,12 @@
   <div class="header-container d-flex flex-column align-items-start">
     <nav id="navmenu" class="navmenu">
       <ul>
-        <li><a href="/preview#hero"><i class="bi bi-house navicon"></i>Home</a></li>
-        <li><a href="/preview#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
-        <li><a href="/preview#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
-        <li><a href="/preview#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+        <li><a href="/#hero"><i class="bi bi-house navicon"></i>Home</a></li>
+        <li><a href="/#about"><i class="bi bi-person navicon"></i> About</a></li>
+        <li><a href="/#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+        <li><a href="/#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="/#services" class="active"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
+        <li><a href="/#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
       </ul>
     </nav>
   </div>
@@ -21,33 +23,39 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Page Title -->
   <div class="page-title dark-background">
     <div class="container d-lg-flex justify-content-between align-items-center">
-      <h1 class="mb-2 mb-lg-0">{{ service.title|default:'Service Details' }}</h1>
+      <h1 class="mb-2 mb-lg-0">{{ service.title }}</h1>
       <nav class="breadcrumbs">
         <ol>
-          <li><a href="/preview/">Home</a></li>
+          <li><a href="/">Home</a></li>
           <li class="current">Service Details</li>
         </ol>
       </nav>
     </div>
   </div>
 
-  <!-- Service Details Section (simplified placeholder) -->
   <section id="service-details" class="service-details section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div class="row gy-4">
         <div class="col-lg-8">
-          <img class="img-fluid rounded" src="{% static 'assets/img/services/services-1.jpg' %}" alt="Service image">
+            {% if service.display_image %}
+                <img class="img-fluid rounded" src="{{ service.display_image }}" alt="{{ service.title }}">
+            {% else %}
+                <div class="p-5 border rounded text-center">
+                    <i class="{{ service.icon_class|default:'bi bi-gear' }}" style="font-size: 4rem;"></i>
+                </div>
+            {% endif %}
         </div>
         <div class="col-lg-4">
           <div class="service-info p-4 border rounded-3">
-            <h3>Service information</h3>
+            <h3>Overview</h3>
             <ul class="list-unstyled small mb-0">
-              <li><strong>Icon</strong>: <i class="bi bi-code-slash"></i></li>
-              <li><strong>Slug</strong>: {{ service.slug }}</li>
-              <li><strong>Status</strong>: Available</li>
+              <li><strong>Service</strong>: {{ service.title }}</li>
+              <li><strong>Status</strong>: Available for Hire</li>
+              {% if service.featured %}
+              <li><span class="badge bg-primary">Featured Service</span></li>
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -56,7 +64,7 @@
         <div class="col-12">
           <div class="service-description">
             <h2>About this service</h2>
-            <p>{{ service.description|default:'Detailed description coming soon.' }}</p>
+            <p>{{ service.description|default:service.short_description|linebreaks }}</p>
           </div>
         </div>
       </div>

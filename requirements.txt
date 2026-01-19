@@ -2,5 +2,8 @@ asgiref==3.5.2
 Django==4.1.2
 sqlparse==0.4.3
 tzdata==2022.4
-
+Pillow
+requests
 python-dotenv~=1.0.0
+django-ordered-model
+Faker
