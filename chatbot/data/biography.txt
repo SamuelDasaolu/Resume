@@ -1,0 +1,74 @@
+Comprehensive Professional Biography: Samuel Dasaolu
+1. Professional Profile & Contact Metadata
+Subject: Samuel Dasaolu
+Current Designation: Gen AI Fellow (Ogun State Government), Mechatronics Engineer, AI Innovator
+Professional Focus: AI-Driven Governance, Embedded Systems, Mechatronics, Agritech, and Civic Technology
+Academic Standing: First Class Honors (CGPA 4.65/5.00), Best Graduating Student in Automation & Robotics (FUNAAB)
+Location: Abeokuta, Nigeria
+Digital Footprint:
+* Email: samueldasaolu40@gmail.com
+* LinkedIn: https://www.google.com/search?q=linkedin.com/in/dasaolu-samuel
+* GitHub: https://www.google.com/search?q=github.com/Samuel Dasaolu
+2. Technical Skills Matrix
+* Core Engineering: Mechatronics, Robotics, Control Systems Design, PLC Programming, Automotive Diagnostics.
+* Software & AI: Python (Advanced), Machine Learning (Scikit-Learn), Deep Learning, RAG (Retrieval-Augmented Generation), LangChain, Fine-tuning LLMs.
+* Web & API: FastAPI, Django, Streamlit, Render Deployment, PostgreSQL (psycopg2, SQLAlchemy).
+* Embedded Systems & IoT: C/C++, Arduino, ESP32/ESP8266, Proteus Simulation, Sensors (TDS, pH, Turbidity).
+* Tools & Design: MATLAB, Simulink, AutoCAD, SolidWorks, Jupyter Notebooks.
+3. Education & Academic Honors (2019–2025)
+Federal University of Agriculture, Abeokuta (FUNAAB)
+* Degree: Bachelor of Engineering (Mechatronics Engineering) — First Class Honors.
+* Top Honor: Best Graduating Student in Automation and Robotics.
+* Scholarship: Nigeria LNG Scholarship Beneficiary (Merit-based, 5 consecutive years).
+* Curriculum Focus: Applied Science in Electrical/Mechanical Systems, Computational Mathematics, and Industrial Practice.
+4. Chronological Professional Experience & Projects
+Phase 1: Infrastructure & Energy (Late 2023)
+Role: Field Engineering Intern (Solar Installation)
+Organization: Eauxwell Nigeria Limited
+Period: Nov 2023 – Dec 2023
+Samuel’s entry into large-scale infrastructure began with renewable energy. He supported the installation of a 3MW Hybrid Solar Power Plant at FUNAAB.
+* Key Achievement: Ensured strict adherence to HSE standards, earning HSE Levels 1 & 2 Certification from UNICUS Nigeria.
+* Operational Scope: Equipment calibration, documentation of field inspection reports, and maintenance of hybrid systems.
+Phase 2: Automotive Engineering & Diagnostics (2024)
+Role: Mechanical, Electrical, and Automobile Engineering Intern
+Organization: Automedics Engineering Limited
+Period: Apr 2024 – Oct 2024
+Transitioning to automotive systems, Samuel combined field operations with rigorous diagnostics training.
+* Routine: His schedule involved 8:00 AM workshop sanitation and reporting, followed by specialized diagnostic classes (Mon/Wed/Fri) focusing on electronic control systems and transmission technologies.
+* Notable Technical Repairs:
+   * Toyota Hilux: Executed full-day clutch disc replacements.
+   * Honda Pilot: Performed torque converter replacements, identifying mechanical degradation in worn shafts.
+   * Fleet Maintenance: Assisted in the diagnostics and system testing of light and fleet vehicles using modern electronic tools.
+Phase 3: Embedded Systems Research (Early 2025)
+Project: Smart Water Purification System
+Context: Academic Capstone / Research
+Period: Jan 2025 – June 2025
+Samuel led the engineering of an automated water quality monitoring system addressing SDG 6 (Clean Water and Sanitation).
+* System Architecture: Integrated an ESP32 microcontroller with a sensor array (TDS, pH, Turbidity, Flow, Pressure) and actuators (Solenoid valves, UV lamps).
+* Functionality: The system provided real-time automated purification and transmitted data to a Blynk server for remote monitoring.
+* Outcome: Despite a battery failure during the final demo, Samuel produced a technical handover report recommending a migration from procedural logic to AI-based predictive maintenance, creating a foundation for future publication in NIJOTECH.
+Phase 4: AI Innovation & Governance (Late 2025 – Present)
+Role: Gen AI Fellow
+Organization: Ogun State Government / Bosun Tijani Foundation
+Period: Aug 2025 – Current
+Currently, Samuel leverages AI to solve governance challenges. He collaborates with cross-disciplinary teams to prototype AI solutions for social inclusion and economic growth.
+Key Project: AGROUSSD (Sept 2025 – Current)
+* Concept: An AI-powered agritech platform bridging financial and data gaps for rural smallholder farmers via USSD.
+* Impact Metrics: Engaged 100+ student farmers and 3 commercial farmers in prototype testing.
+* SDG Alignment: Contributes to Zero Hunger (SDG 2) and No Poverty (SDG 1) by providing real-time market data.
+* Leadership: Manages a volunteer team of 4 developers to refine the USSD architecture.
+Phase 5: Civic Technology & RAG Development (Jan 2026)
+Project: CivicAccess (Team SabiLaw)
+Achievement: 1st Place Winner, Awarri N-Atlas Hackathon
+Period: Dec 2025 – Jan 2026
+Samuel led "Team Sabilaw" to victory by developing CivicAccess, a multi-lingual Legal First Responder.
+* Technical Implementation: A Retrieval-Augmented Generation (RAG) application that interprets the Nigerian Constitution and Tenancy Laws into plain English, Hausa, Igbo, and Yoruba.
+* Role: Directed the product roadmap and coordinated sprint planning for a team of 5, ensuring delivery of a functioning prototype within a 5-day deadline.
+* Trajectory: This project marks a definitive shift toward high-stakes, real-world AI deployment for social justice (SDG 16).
+5. Leadership & Community Impact
+* Student Union Executive (2024–2025): Managed the annual budget for the Umar Kabir Hall of Residence (2000+ students), ensuring 100% financial transparency. Secured partnerships with Monster Energy and Moniepoint for student welfare events.
+* Academic Mentorship (2021–Present): Organized peer-to-peer tutorials for over 150 students in Engineering Mathematics and Fluid Flow, significantly improving department pass rates.
+* Technical Volunteer: Provided free IT support and hardware repair (OS installation, component replacement) for peers, reducing technical downtime and costs for the student community.
+6. Current Technical Trajectory & Future Goals
+As of early 2026, Samuel is actively refining his digital portfolio by converting his static website into a dynamic Django-based application featuring a custom RAG component. He is simultaneously pursuing advanced research opportunities, specifically targeting the SMACCS and EMSHIP scholarship programs to further specialize in autonomous systems and smart infrastructure.
+Note: This data file is optimized for RAG retrieval tasks. It combines verified CV data with biographical context to answer queries regarding technical skills, project history, and leadership roles.

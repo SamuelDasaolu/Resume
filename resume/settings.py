@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ordered_model',
-    'core'
+    'core',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

@@ -19,7 +19,7 @@ except admin.sites.NotRegistered:
 class SkillInline(admin.TabularInline):
     model = Skill
     extra = 1
-    fields = ('name', 'level', 'order')
+    fields = ('name', 'level')
     ordering = ('order',)
 
 # --- ModelAdmins ---
@@ -46,7 +46,7 @@ class SocialLinkAdmin(OrderedModelAdmin):
     list_display = ('label', 'url', 'move_up_down_links')
     list_editable = ('url',)
     ordering = ('order',)
-    fields = ('label', 'url', 'icon_class', 'order')
+    fields = ('label', 'url', 'icon_class')
     search_fields = ('label',)
     help_texts = {
         'icon_class': "Example: 'bi bi-github' for a GitHub icon. Uses Bootstrap Icons."
@@ -78,7 +78,7 @@ class ProjectAdmin(OrderedModelAdmin):
             'fields': ('tech_stack', 'repo_url', 'live_url')
         }),
         ('Media & Ordering', {
-            'fields': ('image', 'featured', 'order'),
+            'fields': ('image', 'featured'),
             'description': "Note: For dummy data, 'image' is a URL. In production, it's a file upload."
         }),
     )
@@ -111,7 +111,7 @@ class ServiceAdmin(OrderedModelAdmin):
             'fields': ('title', 'slug', 'short_description', 'description')
         }),
         ('Visuals & Ordering', {
-            'fields': ('icon_class', 'image', 'featured', 'order'),
+            'fields': ('icon_class', 'image', 'featured'),
             'description': "Note: For dummy data, 'image' is a URL. In production, it's a file upload."
         }),
     )

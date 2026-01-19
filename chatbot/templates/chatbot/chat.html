@@ -1,0 +1,210 @@
+{% extends 'base_snapfolio.html' %}
+{% load static %}
+
+{% block title %}Interactive Biography{% endblock %}
+
+{% block header %}
+<!-- Using a simplified header for the chat page -->
+<header id="header" class="header dark-background d-flex flex-column justify-content-center">
+  <i class="header-toggle d-xl-none bi bi-list"></i>
+  <div class="header-container d-flex flex-column align-items-start">
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="/#hero"><i class="bi bi-house navicon"></i>Back to Home</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="page-title dark-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">Interactive Biography</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li class="current">Chatbot</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section id="chatbot-section" class="chatbot-section section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="chat-window" id="chat-window">
+          <!-- Initial Welcome Message -->
+          <div class="message assistant">
+            <p><strong>Samuel Dasaolu:</strong> Hello! I'm an AI assistant representing Samuel Dasaolu. Ask me anything about his professional life, skills, or projects based on his biography.</p>
+          </div>
+        </div>
+        <div class="chat-input-area mt-4">
+          <form id="chat-form" class="d-flex">
+            <input type="text" id="chat-input" class="form-control form-control-lg" placeholder="Ask a question..." autocomplete="off" required>
+            <button type="submit" class="btn btn-primary ms-2 d-flex align-items-center justify-content-center" style="width: 60px;">
+              <i class="bi bi-send"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .chatbot-section .chat-window {
+    height: 65vh;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .chatbot-section .message {
+    padding: 0;
+    max-width: 100%;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+  .chatbot-section .message p {
+    margin: 0;
+  }
+  .chatbot-section .message.user p {
+    color: #aaa;
+  }
+  .chatbot-section .message.assistant p {
+    color: #f0f0f0;
+  }
+  .chatbot-section .message.error p {
+    color: #ff8a8a;
+  }
+  .chatbot-section .chat-input-area .form-control {
+    background-color: #fff;
+    color: #333;
+    border: none;
+  }
+  .chatbot-section .chat-input-area .form-control::placeholder {
+    color: #888;
+  }
+  .chatbot-section .spinner-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f0f0f0;
+  }
+  .chatbot-section .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const chatWindow = document.getElementById('chat-window');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+
+  function addMessage(role, content, isError = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', role);
+    if (isError) {
+        messageDiv.classList.add('error');
+    }
+
+    const p = document.createElement('p');
+
+    let prefix = '';
+    if (role === 'user') {
+        prefix = '<strong>You:</strong> ';
+    } else if (role === 'assistant' && !isError) {
+        prefix = '<strong>Samuel Dasaolu:</strong> ';
+    } else if (isError) {
+        prefix = '<strong>Error:</strong> ';
+    }
+
+    // Simple markdown-to-HTML for lists and bolding
+    let formattedContent = content
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/^\s*\*\s/gm, '<br><strong>*</strong> '); // List items
+
+    p.innerHTML = prefix + formattedContent;
+    messageDiv.appendChild(p);
+
+    chatWindow.appendChild(messageDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function showSpinner() {
+    const spinnerContainer = document.createElement('div');
+    spinnerContainer.id = 'spinner-container';
+    spinnerContainer.classList.add('message', 'assistant', 'spinner-container');
+
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+
+    const spinnerText = document.createElement('span');
+    spinnerText.textContent = 'Thinking...';
+
+    spinnerContainer.appendChild(spinner);
+    spinnerContainer.appendChild(spinnerText);
+
+    chatWindow.appendChild(spinnerContainer);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function removeSpinner() {
+    const spinner = document.getElementById('spinner-container');
+    if (spinner) {
+      spinner.remove();
+    }
+  }
+
+  chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const question = chatInput.value.trim();
+    if (!question) return;
+
+    addMessage('user', question);
+    chatInput.value = '';
+    showSpinner();
+
+    fetch("{% url 'chatbot:ask_question' %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question: question })
+    })
+    .then(response => response.json())
+    .then(data => {
+      removeSpinner();
+      if (data.error) {
+        addMessage('assistant', data.error, true);
+      } else {
+        addMessage('assistant', data.answer);
+      }
+    })
+    .catch(error => {
+      removeSpinner();
+      addMessage('assistant', 'Could not connect to the server. Please try again later.', true);
+      console.error('Fetch Error:', error);
+    });
+  });
+});
+</script>
+{% endblock %}
